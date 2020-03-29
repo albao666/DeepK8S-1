@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
-import tensorflow.contrib.layers as tl
+# import tensorflow.contrib.layers as tl
+import tflearn
 
 
 GAMMA = 0.99
@@ -60,10 +61,10 @@ class ActorNetwork(object):
 
     def create_actor_network(self):
         with tf.variable_scope('actor'):
-            hid_1 = tl.fully_connected(self.inputs, 32, activation_fn=tf.nn.softplus)
-            hid_2 = tl.fully_connected(hid_1, 16, activation_fn=tf.nn.softplus)
-            hid_3 = tl.fully_connected(hid_2, 8, activation_fn=tf.nn.softplus)
-            out = tl.fully_connected(hid_3, self.a_dim, activation_fn=tf.nn.softmax)
+            hid_1 = tflearn.fully_connected(self.inputs, 32, activation='relu')
+            hid_2 = tflearn.fully_connected(hid_1, 16, activation='relu')
+            hid_3 = tflearn.fully_connected(hid_2, 8, activation='relu')
+            out = tflearn.fully_connected(hid_3, self.a_dim, activation='softmax')
             return out
 
 
@@ -146,10 +147,10 @@ class CriticNetwork(object):
 
     def create_critic_network(self):
         with tf.variable_scope('critic'):
-            hid_1 = tl.fully_connected(self.inputs, 32, activation_fn=tf.nn.softplus)
-            hid_2 = tl.fully_connected(hid_1, 16, activation_fn=tf.nn.softplus)
-            hid_3 = tl.fully_connected(hid_2, 8, activation_fn=tf.nn.softplus)
-            out = tl.fully_connected(hid_3, 1, activation_fn=None)
+            hid_1 = tflearn.fully_connected(self.inputs, 32, activation='relu')
+            hid_2 = tflearn.fully_connected(hid_1, 16, activation='relu')
+            hid_3 = tflearn.fully_connected(hid_2, 8, activation='relu')
+            out = tflearn.fully_connected(hid_3, 1, activation='linear')
 
             return out
 

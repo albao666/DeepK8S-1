@@ -13,7 +13,7 @@ S_DIM = [50, 7]
 A_DIM = 10
 ACTOR_LR_RATE = 0.0001
 CRITIC_LR_RATE = 0.001
-NUM_AGENTS = 8
+NUM_AGENTS = 1
 TRAIN_SEQ_LEN = 500  # take as a train batch
 TRAIN_EPOCH = 10000
 MODEL_SAVE_INTERVAL = 100
@@ -30,7 +30,7 @@ def central_agent(net_params_queues, exp_queues):
     assert len(net_params_queues) == NUM_AGENTS
     assert len(exp_queues) == NUM_AGENTS
 
-    with tf.Session() as sess, open(SUMMARY_DIR + '/log_central', 'wb') as log_file:
+    with tf.Session() as sess, open(SUMMARY_DIR + '/log_central', 'w') as log_file:
 
         actor = a3c.ActorNetwork(sess, state_dim=S_DIM, action_dim=A_DIM, learning_rate=ACTOR_LR_RATE)
         critic = a3c.CriticNetwork(sess, state_dim=S_DIM, learning_rate=CRITIC_LR_RATE)
@@ -120,7 +120,7 @@ def agent(agent_id, net_params_queue, exp_queue):
 
     env = Env()
 
-    with tf.Session() as sess, open(SUMMARY_DIR + '/log_agent_' + str(agent_id), 'wb') as log_file:
+    with tf.Session() as sess, open(SUMMARY_DIR + '/log_agent_' + str(agent_id), 'w') as log_file:
         actor = a3c.ActorNetwork(sess,
                                  state_dim=S_DIM, action_dim=A_DIM,
                                  learning_rate=ACTOR_LR_RATE)
@@ -136,7 +136,8 @@ def agent(agent_id, net_params_queue, exp_queue):
         time_stamp = 0
         for ep in range(TRAIN_EPOCH): 
 
-            obs, info = env.reset()
+            obs, info = env.reset()        
+            print(np.array(obs).shape)
 
             s_batch = []
             a_batch = []
@@ -145,6 +146,7 @@ def agent(agent_id, net_params_queue, exp_queue):
             for step in range(TRAIN_SEQ_LEN):
 
                 s_batch.append(obs)
+
 
                 action_prob = actor.predict(np.reshape(obs, (1, S_DIM[0], S_DIM[1])))
                 action_cumsum = np.cumsum(action_prob)
@@ -167,7 +169,7 @@ def agent(agent_id, net_params_queue, exp_queue):
             actor.set_network_params(actor_net_params)
             critic.set_network_params(critic_net_params)
 
-            log_file.write('epoch' + str(ep) + 'reward' + str(np.sum(rew)) + 'step' + str(len(r_batch)))
+            log_file.write('epoch:' + str(ep) + ' reward:' + str(np.sum(rew)) + ' step:' + str(len(r_batch)) + '\n')
             log_file.flush()
 
 

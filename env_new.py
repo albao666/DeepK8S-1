@@ -20,6 +20,9 @@ class Env:
 
     def reset(self):
         self.act_time = 0.
+        self.node_list = []
+        self.task_collector = None
+        self.task_buffer = []
         # node_num = np.random.randint(10, MAX_NODE_NUM)
         node_num = 10
         for _ in range(node_num):
@@ -98,20 +101,24 @@ class Env:
             node_idx.append(-1)
             self.info['idx'] = node_idx
         # print(np.array(state).shape)
+        if not state:
+            print(done)
 
         return state, reward, done, self.info
 
 if __name__ == "__main__":
     env = Env()
-    obs, info = env.reset()
-    i = 0
-    while True:
-        node_idx = info['idx']
-        selected_idx = np.random.randint(len(node_idx))
-        obs, rew, done, info = env.step(node_idx[selected_idx])
-        if rew != 0.:
-            print(rew, i)
-            i += 1
-        # print(obs[0])
-        if done:
-            break
+    for i in range(10):
+        obs, info = env.reset()
+        print(np.array(obs).shape)
+    # i = 0
+    # while True:
+    #     node_idx = info['idx']
+    #     selected_idx = np.random.randint(len(node_idx))
+    #     obs, rew, done, info = env.step(node_idx[selected_idx])
+    #     if rew != 0.:
+    #         print(rew, i)
+    #         i += 1
+    #     # print(obs[0])
+    #     if done:
+    #         break
