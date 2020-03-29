@@ -1,0 +1,4 @@
+/models
+*.bak
+.vscode
+__pycache__

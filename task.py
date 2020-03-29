@@ -36,21 +36,22 @@ class TaskCollection(object):
             disk = float(sp[5])
             _Task = Task(submit_time, cpu, memory, disk, duration)
             self.trace_arr.append(_Task)
+        self.trace_arr = self.trace_arr[: 500]
         f.close()
 
     def get_tasks(self, timestamp):
         ready_task = []
         done = False
         while True:
+            if self.trace_idx == len(self.trace_arr):
+                done = True
+                break
             _var = self.trace_arr[self.trace_idx]
             if _var.submit_time <= timestamp:
                 ready_task.append(_var)
             else:
                 break
             self.trace_idx += 1
-            if self.trace_idx == len(self.trace_arr):
-                done = True
-                break
         return ready_task, done
 
 def sortedDictValues3(adict): 
