@@ -36,7 +36,7 @@ class TaskCollection(object):
             disk = float(sp[5])
             _Task = Task(submit_time, cpu, memory, disk, duration)
             self.trace_arr.append(_Task)
-        self.trace_arr = self.trace_arr[: 500]
+        self.trace_arr = self.trace_arr[: 10000]
         f.close()
 
     def get_tasks(self, timestamp):

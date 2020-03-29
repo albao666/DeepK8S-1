@@ -4,7 +4,6 @@ import logging
 import numpy as np
 import multiprocessing as mp
 import tensorflow as tf
-import gym
 import a3c
 from env_new import Env
 
@@ -13,7 +12,7 @@ S_DIM = [50, 7]
 A_DIM = 10
 ACTOR_LR_RATE = 0.0001
 CRITIC_LR_RATE = 0.001
-NUM_AGENTS = 1
+NUM_AGENTS = 8
 TRAIN_SEQ_LEN = 500  # take as a train batch
 TRAIN_EPOCH = 10000
 MODEL_SAVE_INTERVAL = 100
