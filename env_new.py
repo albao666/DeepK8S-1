@@ -101,8 +101,8 @@ class Env:
             node_idx.append(-1)
             self.info['idx'] = node_idx
         # print(np.array(state).shape)
-        if not state:
-            print(done)
+        # if not state:
+        #     print(done)
 
         return state, reward, done, self.info
 

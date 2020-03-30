@@ -4,8 +4,10 @@ MAX_CPU_NUM = 12
 MAX_MEM = 48
 class Node(object):
     def __init__(self):
-        self.cpu_max = np.random.randint(1, MAX_CPU_NUM) * 8
-        self.memory_max = np.random.randint(1, MAX_MEM) * 8
+        # self.cpu_max = np.random.randint(1, MAX_CPU_NUM) * 8
+        # self.memory_max = np.random.randint(1, MAX_MEM) * 8
+        self.cpu_max = np.random.randint(1, MAX_CPU_NUM)
+        self.memory_max = MAX_MEM // 2
         self.disk_max = 500.
         self.cpu = 0.
         self.memory = 0.
