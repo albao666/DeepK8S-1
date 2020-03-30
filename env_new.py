@@ -84,6 +84,21 @@ class Env:
         state, node_idx = [], []
         self.info = {}
         if not done:
+            while True:
+                avail = False
+                for task in self.task_buffer:
+                    if not avail:
+                        for node in self.node_list:
+                            if node.available(task):
+                                avail = True
+                                break
+                if avail:
+                    break
+                forward_time = self.base_time * np.random.rand()
+                for p in self.node_list:
+                    p.run(forward_time)
+                self.act_time += forward_time
+                break
             for t in range(min(5, len(self.task_buffer))):
                 for node in self.node_list:
                     state.append(node.get_status() + self.task_buffer[t].get_status())
@@ -108,17 +123,24 @@ class Env:
 
 if __name__ == "__main__":
     env = Env()
-    for i in range(10):
-        obs, info = env.reset()
-        print(np.array(obs).shape)
+    obs, info = env.reset()
+    # for i in range(10):
+    #     obs, info = env.reset()
+    #     print(np.array(obs).shape)
     # i = 0
-    # while True:
-    #     node_idx = info['idx']
-    #     selected_idx = np.random.randint(len(node_idx))
-    #     obs, rew, done, info = env.step(node_idx[selected_idx])
-    #     if rew != 0.:
-    #         print(rew, i)
-    #         i += 1
-    #     # print(obs[0])
-    #     if done:
-    #         break
+    R = []
+    while True:
+        node_idx = info['idx']
+        selected_idx = np.random.randint(len(node_idx))
+        obs, rew, done, info = env.step(node_idx[selected_idx])
+        # if rew != 0.:
+        #     print(rew, i)
+        #     i += 1
+        # print(obs[0])
+        # print(env.act_time)
+        if done:
+            break
+        R.append(rew)
+    print(env.task_buffer)
+    print(env.act_time)
+    print(np.mean(R))

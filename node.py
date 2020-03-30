@@ -6,8 +6,8 @@ class Node(object):
     def __init__(self):
         # self.cpu_max = np.random.randint(1, MAX_CPU_NUM) * 8
         # self.memory_max = np.random.randint(1, MAX_MEM) * 8
-        self.cpu_max = np.random.randint(1, MAX_CPU_NUM)
-        self.memory_max = MAX_MEM // 2
+        self.cpu_max = 2.5
+        self.memory_max = 0.03
         self.disk_max = 500.
         self.cpu = 0.
         self.memory = 0.
@@ -30,9 +30,9 @@ class Node(object):
         self.task_instances.remove(task_instance)
 
     def available(self, task):
-        return self.cpu_max >= task.cpu_capacity and \
-               self.memory_max >= task.memory_capacity and \
-               self.disk_max >= task.disk_capacity
+        return self.cpu_max - self.cpu >= task.cpu_capacity and \
+               self.memory_max - self.memory  >= task.memory_capacity and \
+               self.disk_max - self.disk >= task.disk_capacity
     
     def run(self, forward_time = 16):
         for p in self.task_instances:
