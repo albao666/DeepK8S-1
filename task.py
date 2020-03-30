@@ -28,15 +28,18 @@ class TaskCollection(object):
         for line in f:
             #id,submit_time,duration,cpu,memory,job_id,task_id,instances_num,disk
             sp = line.split(',')
-            submit_time = float(sp[1]) * 1000.
-            duration = float(sp[2]) * 1000.
+            # submit_time = float(sp[1]) * 1000.
+            # duration = float(sp[2]) * 1000.
+            submit_time = float(sp[1])
+            duration = float(sp[2])
             cpu = float(sp[3])
             # the largest memory cap in ali
-            memory = float(sp[4]) * 384.
+            # memory = float(sp[4]) * 384.
+            memory = float(sp[4])
             disk = float(sp[5])
             _Task = Task(submit_time, cpu, memory, disk, duration)
             self.trace_arr.append(_Task)
-        self.trace_arr = self.trace_arr[: 1000]
+        self.trace_arr = self.trace_arr[: 10000]
         f.close()
 
     def get_tasks(self, timestamp):
