@@ -137,10 +137,76 @@ class Env:
         # print(np.array(state).shape)
         # if not state:
         #     print(done)
+        if done:
+            ma = 0
+            for node in self.node_list:
+                for task in node.task_instances:
+                    ma = max(task.time_remain(), ma)
+            self.info['time_remain'] = ma
 
         return state, reward, done, self.info
 
 if __name__ == "__main__":
+    env = Env()
+    obs, info = env.reset()
+    # for i in range(10):
+    #     obs, info = env.reset()
+    #     print(np.array(obs).shape)
+    # i = 0
+    R = []
+    while True:
+        node_idx = info['idx']
+        selected_idx = np.random.randint(len(node_idx))
+        obs, rew, done, info = env.step(node_idx[selected_idx])
+        # scheduler = SJF()
+        # action, task = scheduler.schedule(obs)
+        # obs, rew, done, info = env.step(action, task)
+        # scheduler = Packer()
+        # action, task = scheduler.schedule(obs)
+        # obs, rew, done, info = env.step(action, task)
+        # if rew != 0.:
+        #     print(rew, i)
+        #     i += 1
+        # print(obs[0])
+        # print(env.act_time)
+        if done:
+            break
+        if rew:
+            R.append(rew)
+    print('Random Scheduler')
+    print('makespan: ', env.act_time + info['time_remain'])
+    print('average slowdown: ', -np.mean(R))
+    print('--------------------------------')
+    env = Env()
+    obs, info = env.reset()
+    # for i in range(10):
+    #     obs, info = env.reset()
+    #     print(np.array(obs).shape)
+    # i = 0
+    R = []
+    while True:
+        # node_idx = info['idx']
+        # selected_idx = np.random.randint(len(node_idx))
+        # obs, rew, done, info = env.step(node_idx[selected_idx])
+        scheduler = SJF()
+        action, task = scheduler.schedule(obs)
+        obs, rew, done, info = env.step(action, task)
+        # scheduler = Packer()
+        # action, task = scheduler.schedule(obs)
+        # obs, rew, done, info = env.step(action, task)
+        # if rew != 0.:
+        #     print(rew, i)
+        #     i += 1
+        # print(obs[0])
+        # print(env.act_time)
+        if done:
+            break
+        if rew:
+            R.append(rew)
+    print('Short Job First')
+    print('makespan: ', env.act_time + info['time_remain'])
+    print('average slowdown: ', -np.mean(R))
+    print('--------------------------------')
     env = Env()
     obs, info = env.reset()
     # for i in range(10):
@@ -165,7 +231,9 @@ if __name__ == "__main__":
         # print(env.act_time)
         if done:
             break
-        R.append(rew)
-    print(env.task_buffer)
-    print(env.act_time)
-    print(np.sum(R))
+        if rew:
+            R.append(rew)
+    print('Packer Scheduler')
+    print('makespan: ', env.act_time + info['time_remain'])
+    print('average slowdown: ', -np.mean(R))
+    print('--------------------------------')

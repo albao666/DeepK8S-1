@@ -18,5 +18,8 @@ class Pod(object):
             return True
         else:
             return False
+    
+    def time_remain(self):
+        return self.task_duration - self.task_execution_time
 
     

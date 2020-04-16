@@ -6,8 +6,8 @@ class Node(object):
     def __init__(self):
         # self.cpu_max = np.random.randint(1, MAX_CPU_NUM) * 8
         # self.memory_max = np.random.randint(1, MAX_MEM) * 8
-        self.cpu_max = 2.5
-        self.memory_max = 0.03
+        self.cpu_max = 5
+        self.memory_max = 0.05
         self.disk_max = 500.
         self.cpu = 0.
         self.memory = 0.
@@ -40,5 +40,5 @@ class Node(object):
                 self.done(p)
     
     def get_status(self):
-        return [self.cpu / self.cpu_max, self.memory / self.memory_max]
+        return [self.cpu_max - self.cpu, self.memory_max - self.memory]
 
